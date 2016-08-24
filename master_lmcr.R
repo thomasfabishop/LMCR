@@ -33,7 +33,7 @@ names(z)
 
 dInfo = list ("y" = c("pH_02","pH_15"),"coords" = c("Eastings", "Northings"),
               "trend"=  list("pH_02" = "Landuse+PC1.x+PC5.x",
-                             "pH_15" = "Landuse+Geo_3+PC1.x+PC2.x+PC5.x"))
+                             "pH_15" = "Landuse+PC1.x+PC5.x"))
 
 #The possible components of list "vInfo" are:                                                                       #
 # - "name" = string that names the covariance function to fit.                                                      #
@@ -52,6 +52,14 @@ dInfo = list ("y" = c("pH_02","pH_15"),"coords" = c("Eastings", "Northings"),
 ##vInfo = list("name" = "matern", "effrMin" = 0.2, "effrMax" = 8, "phiLock" = TRUE)
 ##vInfo = list("name" = "matern", "effrMin" = 0.2, "effrMax" = 8, "kappaLock" = TRUE, "kappa" = 2)
 
+#Adding cvci did not work?
+vInfo = list("name" = "exponential",
+             "effrMin" = 30,
+             "effrMax" = 80000,
+             "phiLock" = FALSE,
+             "cvci"=TRUE)
+
+#This worked?
 vInfo = list("name" = "exponential",
              "effrMin" = 30,
              "effrMax" = 80000,
@@ -174,3 +182,6 @@ grid()
 # PC5 overlaps
 
 save(pH_11,file="pH_finalmodel.RData")
+
+save(model,file="pH_model.RData")
+
