@@ -74,6 +74,9 @@ lmm = function(z, dInfo, vInfo, mInfo)
     mInfo = tmp$mInfo
     nv = tmp$nv
     nesting = tmp$nesting
+  print(nesting)
+  print(dInfo)
+  print("line 77")
     useSparse = tmp$useSparse
     
 	#If required, compute the standard deviation of each variable, and use it to scale "z".
@@ -144,6 +147,8 @@ lmm = function(z, dInfo, vInfo, mInfo)
     
     #Make the design matrix for the fixed effects and the initial guesses
     #for the parameters of the random effects.
+  print(nesting)
+  print("line151")
     tmp = lmm.XandGuesses(zStk, dInfo, vInfo, mInfo, nesting, nv, nr, stdev, rho, X, Xv)
     vInfo = tmp$vInfo
     X = tmp$X
@@ -884,9 +889,12 @@ lmm.errorCheck = function(z, dInfo, vInfo, mInfo, os)
     if(nv > 9)stop("lmm.errorCheck: The maximum number of variables permitted is 9!")
     if(!any(names(dInfo) != "coords"))stop("lmm: Coordinates are not specified!")
     if(!any(names(dInfo) == "scale") || !is.logical(dInfo$scale))dInfo$scale = FALSE
-    nesting = FALSE
+ 
+  print("line 189, test")
+  nesting = FALSE
+  print(nesting)
     if(any(names(dInfo) == "trend") && any(names(dInfo$trend) == "nesting"))nesting = dInfo$trend$nesting
-    if(!is.logical(nesting))stop("lmm.errorCheck: 19.2.2015 - check that the nesting even works!")
+   # if(!is.logical(nesting))stop("lmm.errorCheck: 19.2.2015 - check that the nesting even works!")
     if(any(names(dInfo) == "trend") && any(names(dInfo$trend) == "X") && !any(names(dInfo$trend) == "Xv"))
     {
         stop("lmm: If specifying the design matrix, you must include a matrix of corresponding size, which labels each element with a variable number!")

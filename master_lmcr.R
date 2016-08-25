@@ -33,7 +33,12 @@ names(z)
 
 dInfo = list ("y" = c("pH_02","pH_15"),"coords" = c("Eastings", "Northings"),
               "trend"=  list("pH_02" = "Landuse+PC1.x+PC5.x",
-                             "pH_15" = "Landuse+PC1.x+PC5.x"))
+                             "pH_15" = "Landuse+PC1.x+PC5.x","nesting"=c(3,6)))
+
+#Example with nesting
+dInfo = list ("y" = c("pH_02","pH_15"),"coords" = c("Eastings", "Northings"),
+              "trend"=  list("pH_02" = "Landuse+PC1.x+PC5.x",
+                             "pH_15" = "Landuse+PC1.x+PC5.x","nesting"=c(3,6)))
 
 #The possible components of list "vInfo" are:                                                                       #
 # - "name" = string that names the covariance function to fit.                                                      #
@@ -122,9 +127,16 @@ mInfo = list("method" = "sanneal",
 # alpha = ??c
 # nStop = NA 
 
+source('lmm_fun.R')
+
 model = lmm(z, dInfo, vInfo, mInfo)
 
-#pH_11=model
+#Plot cooling
+plot(model$model$l)
+
+
+
+pH_11=model
 
 # FINAL MODEL
 ##############################################################################################
@@ -149,7 +161,7 @@ coef_mat <- cbind(coefficients, se_error, t_value, t_prob)
 colnames(coef_mat) <- c("Estimate", "Std.Err","t value", "Pr(>|t|)")
 # order of the trend
 trend1=~Landuse+PC1.x+PC5.x #need to populate with names from trend
-trend2=~Landuse+Geo_3+PC1.x+PC2.x+PC5.x
+trend2=~Landuse+PC1.x+PC5.x
 trend=c(colnames(model.matrix(trend1, z)),colnames(model.matrix(trend2, z)))#model.matrix does n-1 for categories, not sure how it works
 trend #bind two lots of trend, because bivariate model^^
 rownames(coef_mat)=trend
@@ -164,7 +176,7 @@ coef_mat <- cbind(coefficients,L95, U95, se_error, t_value, t_prob)
 colnames(coef_mat) <- c("Estimate", "Lower 95CI", "Upper 95CI","Std.Err","t value", "Pr(>|t|)")
 # order of the trend
 trend1=~Landuse+PC1.x+PC5.x #need to populate with names from trend
-trend2=~Landuse+Geo_3+PC1.x+PC2.x+PC5.x
+trend2=~Landuse+PC1.x+PC5.x
 trend=c(colnames(model.matrix(trend1, z)),colnames(model.matrix(trend2, z)))#model.matrix does n-1 for categories, not sure how it works
 trend #bind two lots of trend, because bivariate model^^
 rownames(coef_mat)=trend
@@ -184,4 +196,15 @@ grid()
 save(pH_11,file="pH_finalmodel.RData")
 
 save(model,file="pH_model.RData")
+
+load(file="pH_model.RData")
+
+#Next steps
+
+#Get CI working
+#Get Design Matrix working
+#Plot model against experimental variogram
+#Prediction for map making
+
+
 
